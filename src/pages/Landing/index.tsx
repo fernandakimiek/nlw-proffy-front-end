@@ -1,6 +1,4 @@
-import React from "react";
-
-import "./styles.css";
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -11,7 +9,22 @@ import studyIcon from "../../assets/images/icons/study.svg";
 import giveClassesIcon from "../../assets/images/icons/give-classes.svg";
 import purpleHeartIcon from "../../assets/images/icons/purple-heart.svg";
 
+import api from "../../services/api";
+
+import "./styles.css";
+
 function Landing() {
+  const [totalConnections, setTotalConnections] = useState(0);
+
+  useEffect(() => {
+    //essa função ela dispara toda vez que entra na tela se deixar o array vazio. se colocar alguma variavel dentro ela vai disparar sempre quando a variável atualizar.
+    api.get("connections").then((response) => {
+      const { total } = response.data;
+
+      setTotalConnections(total);
+    });
+  }, []);
+
   return (
     <div id="page-landing">
       <div id="page-landing-content" className="container">
@@ -39,7 +52,7 @@ function Landing() {
         </div>
 
         <span className="total-connections">
-          Total de 200 conexões já realizadas{" "}
+          Total de {totalConnections} conexões já realizadas{" "}
           <img src={purpleHeartIcon} alt="Coração roxo" />
         </span>
       </div>
